@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://epay.larinde.org/operation/otp/v1"
+	xmlns:pymt-op-v1="http://epay.larinde.org/operation/otp/v1">
+
+	<!-- <xs:include schemaLocation=""/> -->
+
+	<!-- <xs:element name="AuthorizeRequest" type="pymt-op-v1:AuthorizeRequestType"> -->
+	<!-- </xs:element> -->
+
+	<xs:element name="AuthorizeRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Initializes the payment process.
+				The client is validated. On success, the server responds with a referral url.
+				The client is expected to redirect its customer to the referral url.
+				The referral url is a is a link to a server-side authentication system.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="baseMessage" type="pymt-op-v1:BaseRequestType" />
+				<xs:element name="merchantId" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="serviceType" type="pymt-op-v1:ServiceType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="paymentType" type="pymt-op-v1:PaymentType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="amount" type="xs:decimal" minOccurs="1" maxOccurs="1" />
+				<xs:element name="currency" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="returnUrl" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- <xs:element name="AuthorizeResponse" type="pymt-op-v1:AuthorizeResponseType"> -->
+	<!-- <xs:annotation> -->
+	<!-- <xs:documentation></xs:documentation> -->
+	<!-- </xs:annotation> -->
+	<!-- </xs:element> -->
+	<xs:element name="AuthorizeResponse">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="baseMessage" type="pymt-op-v1:BaseResponseType"/>
+				<xs:element name="transactionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="sessionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="transactionStatus" type="pymt-op-v1:TransactionStatusType"/>
+				<xs:element name="referralURL" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="authToken" type="xs:hexBinary" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="AcknowledgeRequest">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="baseRequestType" type="pymt-op-v1:BaseRequestType" />
+				<xs:element name="merchantId" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="sessionId" type="xs:string" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="AcknowledgeResponse">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="baseResponseType" type="pymt-op-v1:BaseResponseType" />
+				<xs:element name="transactionId" type="xs:string" />
+				<xs:element name="sessionId" type="xs:string" />
+				<xs:element name="transactionStatus" type="pymt-op-v1:TransactionStatusType" />
+				<xs:element name="returnCode" type="pymt-op-v1:ReturnCodeType" maxOccurs="1" minOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="CaptureRequest">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation></xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="baseMessage" type="pymt-op-v1:BaseRequestType"></xs:element>
+				<xs:element name="merchantId" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+				<xs:element name="amount" type="xs:decimal" minOccurs="1" maxOccurs="1"></xs:element>
+				<xs:element name="transactionId" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+				<xs:element name="sessionId" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="CaptureResponse">
+		<xs:annotation>
+			<xs:documentation>Captures a booked amount. Revokable by a Refund function</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation></xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="baseMessage" type="pymt-op-v1:BaseResponseType" />
+				<xs:element name="transactionId" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="sessionId" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="transactionStatus" type="pymt-op-v1:TransactionStatusType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="OneTimePaymentFault">
+		<xs:annotation>
+			<xs:documentation></xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="message" maxOccurs="1" minOccurs="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="255" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:complexType name="BaseRequestType">
+		<xs:sequence>
+			<xs:element name="version" type="xs:string" maxOccurs="1" nillable="false" />
+			<xs:element name="requestType" type="pymt-op-v1:MessageType" maxOccurs="1" nillable="false" />
+			<xs:element name="requestId" type="xs:string" maxOccurs="1" nillable="false" />
+			<xs:element name="username" type="xs:string" maxOccurs="1" nillable="false" />
+			<xs:element name="password" type="xs:string" maxOccurs="1" nillable="false" />
+			<!-- Time and date the message was sent -->
+			<xs:element name="communicationDate" type="xs:dateTime" maxOccurs="1" nillable="false" />
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="BaseResponseType">
+		<xs:sequence>
+			<!-- application contract version -->
+			<xs:element name="version" type="xs:string" maxOccurs="1" nillable="false" />
+			<!-- request message type -->
+			<xs:element name="requestType" type="pymt-op-v1:MessageType" maxOccurs="1" nillable="false" />
+			<xs:element name="requestId" type="xs:string" maxOccurs="1" nillable="false" />
+			<!-- status code of response message -->
+			<xs:element name="statusCode" type="xs:string" maxOccurs="1" nillable="false" />
+			<!-- description of status code -->
+			<xs:element name="statusText" type="xs:string" maxOccurs="1" nillable="false" />
+			<!-- Time and date the message was sent -->
+			<xs:element name="communicationDate" type="xs:dateTime" maxOccurs="1" nillable="false" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ErrorMessageResponseType">
+		<xs:annotation>
+			<xs:documentation>
+				Error response message.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="httpErrorCode" type="xs:string" nillable="true" />
+			<xs:element name="additionalInfo" type="xs:string" maxOccurs="1" nillable="true" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="MessageType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="authorize"></xs:enumeration>
+			<xs:enumeration value="acknowledge"></xs:enumeration>
+			<xs:enumeration value="capture"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="TransactionStatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="authorized"></xs:enumeration>
+			<xs:enumeration value="captured"></xs:enumeration>
+			<xs:enumeration value="inProcess"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="ReturnCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="success"></xs:enumeration>
+			<xs:enumeration value="failure"></xs:enumeration>
+			<xs:enumeration value="error"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="FailCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SUBSCRIBER_HAS_INSUFFICIENT_FUNDS" />
+			<xs:enumeration value="SUBSCRIBER_IS_INACTIVE" />
+			<xs:enumeration value="UNKNOWN_SUBSCRIBER" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="ServiceType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="web"></xs:enumeration>
+			<xs:enumeration value="wap"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="PaymentType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="subscr"></xs:enumeration>
+			<xs:enumeration value="otp"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="SynchType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="synchronous"></xs:enumeration>
+			<xs:enumeration value="asynchronous"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+
+</xs:schema>
