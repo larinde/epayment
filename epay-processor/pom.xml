@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>epayment</artifactId>
+    <groupId>org.larinde.epay</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <groupId>org.larinde.epay.proc</groupId>
+  <artifactId>epay-processor</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>epay-processor</name>
+  <modules>
+    <module>epay-proc-server</module>
+    <module>epay-proc-auth</module>
+    <module>epay-proc-ack</module>
+    <module>epay-proc-capture</module>
+  </modules>
+</project>

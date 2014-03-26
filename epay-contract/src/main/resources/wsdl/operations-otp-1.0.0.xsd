@@ -13,7 +13,7 @@
 				Initializes the payment process.
 				The client is validated. On success, the server responds with a referral url.
 				The client is expected to redirect its customer to the referral url.
-				The referral url is a is a link to a server-side authentication system.
+				The referral url is a link to a server-side authentication system.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
