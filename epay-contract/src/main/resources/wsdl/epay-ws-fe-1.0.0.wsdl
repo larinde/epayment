@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="oneTimePayment" targetNamespace="http://epay.larinde.org/ws/otp/v1" xmlns:tns="http://epay.larinde.org/ws/otp/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:otp-ops="http://epay.larinde.org/operation/otp/v1">
+<wsdl:definitions name="ePayment" targetNamespace="http://epay.larinde.org/ws/v1" xmlns:tns="http://epay.larinde.org/ws/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:otp-ops="http://epay.larinde.org/operation/v1">
 
 	<wsdl:types>
 		<xsd:schema>
-			<xsd:import schemaLocation="operations-otp-1.0.0.xsd" namespace="http://epay.larinde.org/operation/otp/v1" />
+			<xsd:import schemaLocation="operations-epay-1.0.0.xsd" namespace="http://epay.larinde.org/operation/v1" />
 		</xsd:schema>
 	</wsdl:types>
 
@@ -26,72 +26,72 @@
 	<wsdl:message name="CapturePaymentResponse">
 		<wsdl:part name="body" element="otp-ops:CaptureResponse" />
 	</wsdl:message>
-	<wsdl:message name="otpFault">
-		<wsdl:part name="body" element="otp-ops:OneTimePaymentFault" />
+	<wsdl:message name="epayFault">
+		<wsdl:part name="body" element="otp-ops:EPaymentFault" />
 	</wsdl:message>
 
 
-	<wsdl:portType name="OtpPaymentEndPoint">
+	<wsdl:portType name="EPaymentEndPoint">
 		<wsdl:operation name="Authorize">
 			<wsdl:input message="tns:AuthorizePaymentRequest" />
 			<wsdl:output message="tns:AuthorizePaymentResponse" />
-			<wsdl:fault name="otpFault" message="tns:otpFault" />
+			<wsdl:fault name="epayFault" message="tns:epayFault" />
 		</wsdl:operation>
 		<wsdl:operation name="Acknowledge">
 			<wsdl:input message="tns:AcknowledgePaymentRequest" />
 			<wsdl:output message="tns:AcknowledgePaymentResponse" />
-			<wsdl:fault name="otpFault" message="tns:otpFault" />
+			<wsdl:fault name="epayFault" message="tns:epayFault" />
 		</wsdl:operation>
 		<wsdl:operation name="Capture">
 			<wsdl:input message="tns:CapturePaymentRequest" />
 			<wsdl:output message="tns:CapturePaymentResponse" />
-			<wsdl:fault name="otpFault" message="tns:otpFault" />
+			<wsdl:fault name="epayFault" message="tns:epayFault" />
 		</wsdl:operation>
 	</wsdl:portType>
 
-	<wsdl:binding name="OtpPaymentEndPointBinding" type="tns:OtpPaymentEndPoint">
+	<wsdl:binding name="EPaymentEndPointBinding" type="tns:EPaymentEndPoint">
 		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
 		<wsdl:operation name="Authorize">
-			<soap:operation soapAction="http://epay.larinde.org/ws/otp/v1/Authorize" />
+			<soap:operation soapAction="http://epay.larinde.org/ws/epay/v1/Authorize" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output>
 				<soap:body use="literal" />
 			</wsdl:output>
-			<wsdl:fault name="otpFault">
-				<soap:fault name="otpFault" use="literal" />
+			<wsdl:fault name="epayFault">
+				<soap:fault name="epayFault" use="literal" />
 			</wsdl:fault>
 		</wsdl:operation>
 		<wsdl:operation name="Acknowledge">
-			<soap:operation soapAction="http://epay.larinde.org/ws/otp/v1/Acknowledge" />
+			<soap:operation soapAction="http://epay.larinde.org/ws/epay/v1/Acknowledge" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output>
 				<soap:body use="literal" />
 			</wsdl:output>
-			<wsdl:fault name="otpFault">
-				<soap:fault name="otpFault" use="literal" />
+			<wsdl:fault name="epayFault">
+				<soap:fault name="epayFault" use="literal" />
 			</wsdl:fault>
 		</wsdl:operation>
 		<wsdl:operation name="Capture">
-			<soap:operation soapAction="http://epay.larinde.org/ws/otp/v1/Capture" />
+			<soap:operation soapAction="http://epay.larinde.org/ws/epay/v1/Capture" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output>
 				<soap:body use="literal" />
 			</wsdl:output>
-			<wsdl:fault name="otpFault">
-				<soap:fault name="otpFault" use="literal" />
+			<wsdl:fault name="epayFault">
+				<soap:fault name="epayFault" use="literal" />
 			</wsdl:fault>
 		</wsdl:operation>
 	</wsdl:binding>
 
-	<wsdl:service name="OtpPaymentService">
-		<wsdl:port name="OtpPaymentPort" binding="tns:OtpPaymentEndPointBinding">
-			<soap:address location="http://localhost:8080/pamentplatform/OtpPaymentService" />
+	<wsdl:service name="EPaymentService">
+		<wsdl:port name="EPaymentPort" binding="tns:EPaymentEndPointBinding">
+			<soap:address location="http://localhost:8080/epayment/EPaymentService" />
 		</wsdl:port>
 	</wsdl:service>
 

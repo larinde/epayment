@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema version="1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://epay.larinde.org/operation/otp/v1"
-	xmlns:pymt-op-v1="http://epay.larinde.org/operation/otp/v1">
+<xs:schema version="1.0.0" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://epay.larinde.org/operation/v1"
+	xmlns:pymt-op-v1="http://epay.larinde.org/operation/v1">
 
 	<!-- <xs:include schemaLocation=""/> -->
 
@@ -114,7 +114,7 @@
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="OneTimePaymentFault">
+	<xs:element name="EPaymentFault">
 		<xs:annotation>
 			<xs:documentation></xs:documentation>
 		</xs:annotation>

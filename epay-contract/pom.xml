@@ -64,7 +64,7 @@
 							<sourceRoot>${basedir}/target/generated-sources/</sourceRoot>
 							<wsdlOptions>
 								<wsdlOption>
-									<wsdl>${basedir}/${schema.location}/epay-otp-ws-fe-1.0.0.wsdl</wsdl>
+									<wsdl>${basedir}/${schema.location}/epay-ws-fe-1.0.0.wsdl</wsdl>
 									<extraargs>
 										<extraarg>-b</extraarg>
 										<extraarg>
