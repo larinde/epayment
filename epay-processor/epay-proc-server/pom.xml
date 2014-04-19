@@ -44,7 +44,7 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-javaconfig</artifactId>
 		</dependency>
-		<!-- for running inside a servlet container -->
+		<!-- Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
