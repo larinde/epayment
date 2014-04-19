@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring" xmlns:web-services="http://www.springframework.org/schema/web-services" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd">
+
+	<beans:bean id="epayWsdl" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
+		<beans:property name="schemaCollection">
+			<beans:bean class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
+				<beans:property name="inline" value="true" />
+				<beans:property name="xsds">
+					<beans:list>
+						<beans:value>classpath:wsdl/operations-epay-1.0.0.xsd</beans:value>
+					</beans:list>
+				</beans:property>
+			</beans:bean>
+		</beans:property>
+		<beans:property name="portTypeName" value="EPaymentPort" />
+		<beans:property name="locationUri" value="/" />
+		<beans:property name="targetNamespace" value="http://epay.larinde.org/ws/v1" />
+	</beans:bean>
+
+	<beans:bean id="epayEndPointMapping" class="org.apache.camel.component.spring.ws.bean.CamelEndpointMapping">
+		<beans:property name="interceptors">
+			<beans:list>
+				<beans:ref bean="epayLoggingInterceptor" />
+				<beans:ref bean="epayValidatingInterceptor" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="epayLoggingInterceptor" class="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor" />
+
+	<beans:bean id="epayValidatingInterceptor" class="org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor">
+		<beans:property name="schema" value="classpath:wsdl/operations-epay-1.0.0.xsd" />
+		<beans:property name="validateRequest" value="true" />
+		<beans:property name="validateResponse" value="true" />
+	</beans:bean>
+
+	<beans:bean id="soapFaultMappingExceptionResolver" class="org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionResolver">
+		<beans:property name="defaultFault" value="SERVER" />
+		<beans:property name="exceptionMappings">
+			<beans:value>
+				org.springframework.oxm.ValidationFailureException=CLIENT,Invalid request
+			</beans:value>
+		</beans:property>
+	</beans:bean>
+
+
+	<camel:camelContext id="epayContext" xmlns="http://camel.apache.org/schema/spring">
+		<camel:routeBuilder ref="epaymentProcessRouter" />
+	</camel:camelContext>
+
+	<beans:bean id="epaymentProcessRouter" class="org.larinde.epay.proc.application.EpaymentProcessRouter">
+		<beans:property name="authorizeProcessor" ref="authorizeProcessor" />
+		<beans:property name="epayConfiguration" ref="epayConfiguration" />
+	</beans:bean>
+
+	<beans:bean id="authorizeProcessor" class="org.larinde.epay.proc.application.AuthorizeProcessor">
+		<beans:property name="paymentService" ref="paymentService" />
+	</beans:bean>
+
+	<beans:bean id="paymentService" class="org.larinde.epay.proc.application.PaymentServiceImpl">
+		<beans:property name="authenticationTokenService" ref="authenticationService" />
+		<beans:property name="merchantValidationService" ref="merchantValidationService" />
+		<beans:property name="paymentIdService" ref="paymentIdService" />
+	</beans:bean>
+
+	<beans:bean id="authenticationService" class="org.larinde.epay.proc.application.AuthenticationTokenServiceImpl" />
+	<beans:bean id="merchantValidationService" class="org.larinde.epay.proc.application.MerchantValidationServiceImpl" />
+	<beans:bean id="paymentIdService" class="org.larinde.epay.proc.application.PaymentIdServiceImpl" />
+
+	<beans:bean id="epayConfiguration" class="org.larinde.epay.proc.domain.model.EPayConfiguration" />
+
+</beans:beans>

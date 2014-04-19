@@ -18,55 +18,47 @@
 
 	<packaging>war</packaging>
 
+	<properties>
+		<app.name>epay</app.name>
+	</properties>
+
 	<dependencies>
 		<!-- Camel Dependencies -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
-			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring-ws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jaxb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
-			<version>${camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-stream</artifactId>
-			<version>${camel.version}</version>
+			<artifactId>camel-spring-javaconfig</artifactId>
 		</dependency>
-
-		<!-- Spring Web -->
+		<!-- for running inside a servlet container -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${spring.core.version}</version>
 		</dependency>
 
-		<!-- logging -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<groupId>org.apache.ws.xmlschema</groupId>
+			<artifactId>xmlschema-core</artifactId>
 		</dependency>
 
-		<!-- testing -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test-spring</artifactId>
-			<version>${camel.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.larinde.epay</groupId>
 			<artifactId>epay-contract</artifactId>
@@ -76,6 +68,7 @@
 
 	<build>
 		<defaultGoal>install</defaultGoal>
+		<finalName>${app.name}</finalName>
 		<plugins>
 			<!-- plugin so you can run mvn jetty:run -->
 			<plugin>
