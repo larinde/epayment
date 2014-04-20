@@ -8,19 +8,19 @@ import org.larinde.epay.proc.domain.model.PaymentResponseDTO;
 import org.larinde.epay.proc.domain.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author olarinde.ajai@gmail.com
  * 
  */
+@Component
 public class AuthorizeProcessor implements Processor {
 
+	@Autowired
 	private PaymentService paymentService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizeProcessor.class);
-
-	public void setPaymentService(PaymentService paymentService) {
-		this.paymentService = paymentService;
-	}
 
 	@Override
 	public void process(Exchange exchange) throws Exception {

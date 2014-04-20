@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring" xmlns:web-services="http://www.springframework.org/schema/web-services" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring" xmlns:web-services="http://www.springframework.org/schema/web-services" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services.xsd">
+
+	<context:component-scan base-package="org.larinde.epay.proc.application" />
+	<context:component-scan base-package="org.larinde.epay.proc.domain.model" />
 
 	<beans:bean id="epayWsdl" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
 		<beans:property name="schemaCollection">
@@ -50,24 +54,26 @@
 		<camel:routeBuilder ref="epaymentProcessRouter" />
 	</camel:camelContext>
 
-	<beans:bean id="epaymentProcessRouter" class="org.larinde.epay.proc.application.EpaymentProcessRouter">
-		<beans:property name="authorizeProcessor" ref="authorizeProcessor" />
-		<beans:property name="epayConfiguration" ref="epayConfiguration" />
-	</beans:bean>
+	<beans:bean id="epaymentProcessRouter" class="org.larinde.epay.proc.application.EpaymentProcessRouter" />
 
-	<beans:bean id="authorizeProcessor" class="org.larinde.epay.proc.application.AuthorizeProcessor">
-		<beans:property name="paymentService" ref="paymentService" />
-	</beans:bean>
+	<!-- <beans:bean id="epaymentProcessRouter" class="org.larinde.epay.proc.application.EpaymentProcessRouter"> -->
+	<!-- <beans:property name="authorizeProcessor" ref="authorizeProcessor" /> -->
+	<!-- <beans:property name="epayConfiguration" ref="epayConfiguration" /> -->
+	<!-- </beans:bean> -->
 
-	<beans:bean id="paymentService" class="org.larinde.epay.proc.application.PaymentServiceImpl">
-		<beans:property name="authenticationTokenService" ref="authenticationService" />
-		<beans:property name="merchantValidationService" ref="merchantValidationService" />
-		<beans:property name="paymentIdService" ref="paymentIdService" />
-	</beans:bean>
+	<!-- <beans:bean id="authorizeProcessor" class="org.larinde.epay.proc.application.AuthorizeProcessor"> -->
+	<!-- <beans:property name="paymentService" ref="paymentService" /> -->
+	<!-- </beans:bean> -->
 
-	<beans:bean id="authenticationService" class="org.larinde.epay.proc.application.AuthenticationTokenServiceImpl" />
-	<beans:bean id="merchantValidationService" class="org.larinde.epay.proc.application.MerchantValidationServiceImpl" />
-	<beans:bean id="paymentIdService" class="org.larinde.epay.proc.application.PaymentIdServiceImpl" />
+	<!-- <beans:bean id="paymentService" class="org.larinde.epay.proc.application.PaymentServiceImpl"> -->
+	<!-- <beans:property name="authenticationTokenService" ref="authenticationService" /> -->
+	<!-- <beans:property name="merchantValidationService" ref="merchantValidationService" /> -->
+	<!-- <beans:property name="paymentIdService" ref="paymentIdService" /> -->
+	<!-- </beans:bean> -->
+
+	<!-- <beans:bean id="authenticationService" class="org.larinde.epay.proc.application.AuthenticationTokenServiceImpl" /> -->
+	<!-- <beans:bean id="merchantValidationService" class="org.larinde.epay.proc.application.MerchantValidationServiceImpl" /> -->
+	<!-- <beans:bean id="paymentIdService" class="org.larinde.epay.proc.application.PaymentIdServiceImpl" /> -->
 
 	<beans:bean id="epayConfiguration" class="org.larinde.epay.proc.domain.model.EPayConfiguration" />
 

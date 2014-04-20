@@ -1,8 +1,5 @@
 package org.larinde.epay.proc.application;
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.Expression;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
 import org.larinde.epay.domain.ws.soap.AcknowledgeRequest;
@@ -12,11 +9,14 @@ import org.larinde.epay.domain.ws.soap.AuthorizeResponse;
 import org.larinde.epay.domain.ws.soap.CaptureRequest;
 import org.larinde.epay.domain.ws.soap.CaptureResponse;
 import org.larinde.epay.proc.domain.model.EPayConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author olarinde.ajai@gmail.com
  * 
  */
+@Component
 public class EpaymentProcessRouter extends RouteBuilder {
 
 	private JaxbDataFormat authorizeRequestDataFormat;
@@ -25,20 +25,14 @@ public class EpaymentProcessRouter extends RouteBuilder {
 	private JaxbDataFormat acknowledgeResponseDataFormat;
 	private JaxbDataFormat captureRequestDataFormat;
 	private JaxbDataFormat captureResponseDataFormat;
+	@Autowired
 	private AuthorizeProcessor authorizeProcessor;
+	@Autowired
 	private EPayConfiguration epayConfiguration;
 
 	private static final String AUTHORIZE_ROUTE_IDENTIFIER = "spring-ws:rootqname:{http://epay.larinde.org/operation/v1}AuthorizeRequest?endpointMapping=#epayEndPointMapping";
 	private static final String ACKNOWLEDGE_ROUTE_IDENTIFIER = "spring-ws:rootqname:{http://epay.larinde.org/operation/v1}AcknowledgeRequest?endpointMapping=#epayEndPointMapping";
 	private static final String CAPTURE_ROUTE_IDENTIFIER = "spring-ws:rootqname:{http://epay.larinde.org/operation/v1}CaptureRequest?endpointMapping=#epayEndPointMapping";
-
-	public void setAuthorizeProcessor(AuthorizeProcessor authorizeProcessor) {
-		this.authorizeProcessor = authorizeProcessor;
-	}
-
-	public void setEpayConfiguration(EPayConfiguration epayConfiguration) {
-		this.epayConfiguration = epayConfiguration;
-	}
 
 	@Override
 	public void configure() throws Exception {

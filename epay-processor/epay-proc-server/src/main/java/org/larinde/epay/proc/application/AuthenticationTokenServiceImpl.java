@@ -7,11 +7,13 @@ import java.util.Arrays;
 import org.larinde.epay.proc.domain.model.AuthTokenGenerationFailureException;
 import org.larinde.epay.proc.domain.model.AuthTokenVerificationFailureException;
 import org.larinde.epay.proc.domain.service.AuthenticationService;
+import org.springframework.stereotype.Service;
 
 /**
  * @author olarinde.ajai@gmail.com
  * 
  */
+@Service
 public class AuthenticationTokenServiceImpl implements AuthenticationService {
 
 	private static final String ENCRYPTION_ALGORITHM = "SHA-256";

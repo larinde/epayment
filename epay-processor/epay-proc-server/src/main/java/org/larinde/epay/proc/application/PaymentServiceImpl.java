@@ -18,41 +18,23 @@ import org.larinde.epay.proc.domain.service.PaymentIdService;
 import org.larinde.epay.proc.domain.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author olarinde.ajai@gmail.com
  * 
  */
+@Service
 public class PaymentServiceImpl implements PaymentService {
-	private AuthenticationService authenticationTokenService;
-	private PaymentIdService paymentIdService;
-	private MerchantValidationService merchantValidationService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
 	private static final String APPLICATION_VERSION = "1.0.0";
-
-	public AuthenticationService getAuthenticationTokenService() {
-		return authenticationTokenService;
-	}
-
-	public void setAuthenticationTokenService(AuthenticationService authenticationTokenService) {
-		this.authenticationTokenService = authenticationTokenService;
-	}
-
-	public PaymentIdService getPaymentIdService() {
-		return paymentIdService;
-	}
-
-	public void setPaymentIdService(PaymentIdService paymentIdService) {
-		this.paymentIdService = paymentIdService;
-	}
-
-	public MerchantValidationService getMerchantValidationService() {
-		return merchantValidationService;
-	}
-
-	public void setMerchantValidationService(MerchantValidationService merchantValidationService) {
-		this.merchantValidationService = merchantValidationService;
-	}
+	@Autowired
+	private AuthenticationService authenticationTokenService;
+	@Autowired
+	private PaymentIdService paymentIdService;
+	@Autowired
+	private MerchantValidationService merchantValidationService;
 
 	@Override
 	public PaymentResponseDTO process(final PaymentRequestDTO request) throws PaymentServiceException {
