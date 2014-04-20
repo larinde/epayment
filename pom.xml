@@ -22,7 +22,6 @@
 	</properties>
 
 	<modules>
-		<module>epay-dstore</module>
 		<module>epay-contract</module>
 		<module>epay-common</module>
 		<module>epay-shop</module>

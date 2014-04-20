@@ -18,6 +18,7 @@
 		<module>epay-proc-auth</module>
 		<module>epay-proc-ack</module>
 		<module>epay-proc-capture</module>
+		<module>epay-proc-datastore</module>
 	</modules>
 
 	<dependencies>
