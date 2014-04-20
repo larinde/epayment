@@ -12,21 +12,16 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 /**
  * @author olarinde.ajai@gmail.com
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name=Payment.FIND_PAYMENT_BY_DATE_RANGE, query="SELECT p FROM Payment p WHERE p.date BETWEEN :fromDate AND :toDate"),
-	@NamedQuery(name=Payment.FIND_PAYMENT_BY_STATUS, query="SELECT p FROM Payment p WHERE p.status = :status"),
-	@NamedQuery(name=Payment.FIND_PAYMENT_BY_FLOW, query="SELECT p FROM Payment p WHERE p.paymentFlow = :paymentFlow")
-})
+@NamedQueries({ @NamedQuery(name = Payment.FIND_PAYMENT_BY_DATE_RANGE, query = "SELECT p FROM Payment p WHERE p.date BETWEEN :fromDate AND :toDate"), @NamedQuery(name = Payment.FIND_PAYMENT_BY_STATUS, query = "SELECT p FROM Payment p WHERE p.status = :status"), @NamedQuery(name = Payment.FIND_PAYMENT_BY_FLOW, query = "SELECT p FROM Payment p WHERE p.paymentFlow = :paymentFlow") })
 public class Payment extends AbstractEntity {
 
 	private static final long serialVersionUID = 5747593650555733394L;
-	
+
 	public static final String FIND_PAYMENT_BY_DATE_RANGE = "findPaymentByDateRange";
 	public static final String FROM_DATE_PARAM = "fromDate";
 	public static final String TO_DATE_PARAM = "toDate";
@@ -34,7 +29,10 @@ public class Payment extends AbstractEntity {
 	public static final String PAYMENT_STATUS_PARAM = "status";
 	public static final String FIND_PAYMENT_BY_FLOW = "findPaymentByFlow";
 	public static final String PAYMENT_FLOW_PARAM = "paymentFlow";
-	
+	@Column(nullable = false, unique = true)
+	private String transactionId;
+	@Column(nullable = false, unique = false)
+	private String sessionId;
 	@Enumerated(EnumType.STRING)
 	private PaymentStatus status;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -49,16 +47,16 @@ public class Payment extends AbstractEntity {
 	private BigDecimal amount;
 	@Column(nullable = false)
 	private String currency;
-	@Column(nullable = false)
-	private String returnUrl;
 	private String description;
 
 	protected Payment() {
 		super();
 	}
 
-	public Payment(PaymentStatus status, Date date, String merchantId, String serviceType, PaymentFlow paymentFlow, BigDecimal amount, String currency, String returnUrl, String description) {
+	public Payment(String sessionId, String transactionId, PaymentStatus status, Date date, String merchantId, String serviceType, PaymentFlow paymentFlow, BigDecimal amount, String currency, String description) {
 		super();
+		this.sessionId = sessionId;
+		this.transactionId = transactionId;
 		this.status = status;
 		this.date = date;
 		this.merchantId = merchantId;
@@ -66,8 +64,15 @@ public class Payment extends AbstractEntity {
 		this.paymentFlow = paymentFlow;
 		this.amount = amount;
 		this.currency = currency;
-		this.returnUrl = returnUrl;
 		this.description = description;
+	}
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
 	}
 
 	public PaymentStatus getStatus() {
@@ -126,20 +131,20 @@ public class Payment extends AbstractEntity {
 		this.currency = currency;
 	}
 
-	public String getReturnUrl() {
-		return returnUrl;
-	}
-
-	public void setReturnUrl(String returnUrl) {
-		this.returnUrl = returnUrl;
-	}
-
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 
 }

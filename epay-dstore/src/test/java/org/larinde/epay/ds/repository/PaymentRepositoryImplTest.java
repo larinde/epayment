@@ -8,10 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.larinde.epay.ds.AbstractIntegrationTest;
 import org.larinde.epay.ds.config.JpaDataStoreConfig;
@@ -40,7 +36,7 @@ public class PaymentRepositoryImplTest extends AbstractIntegrationTest {
 
 	@Test
 	public void shouldSaveNewPayment() {
-		Payment payment = new Payment(PaymentStatus.OPEN, new Date(), "ABC123", "service", PaymentFlow.AUTHORIZE, new BigDecimal("13.35"), "USD", "http://localhost:8080/shopClient1/authorize", "some item");
+		Payment payment = new Payment("SID_1234567", "TRN_1234567", PaymentStatus.OPEN, new Date(), "ABC123", "service", PaymentFlow.AUTHORIZE, new BigDecimal("13.35"), "USD", "some item");
 		assertThat(payment.getId(), is(nullValue()));
 		paymentRepository.save(payment);
 		assertThat(payment.getId(), is(notNullValue()));

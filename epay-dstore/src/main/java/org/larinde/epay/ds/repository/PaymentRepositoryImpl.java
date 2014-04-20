@@ -3,8 +3,6 @@ package org.larinde.epay.ds.repository;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.larinde.epay.ds.domain.Payment;
@@ -17,10 +15,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class PaymentRepositoryImpl implements PaymentRepository {
-
-	@PersistenceContext
-	private EntityManager em;
+public class PaymentRepositoryImpl extends AbstractEpayRepository implements PaymentRepository {
 
 	@Override
 	public Payment save(Payment payment) {
