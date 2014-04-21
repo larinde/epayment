@@ -81,6 +81,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	private boolean validMerchant(AuthorizeRequest request) {
+		LOGGER.debug("validating merchant with id {}", request.getBaseMessage().getMerchantId());
 		MerchantCredential credential = new MerchantCredential(request.getBaseMessage().getUsername(), request.getBaseMessage().getPassword(), request.getBaseMessage().getMerchantId(), false);
 		return merchantValidationService.validMerchant(credential);
 	}
