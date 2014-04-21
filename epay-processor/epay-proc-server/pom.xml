@@ -59,6 +59,17 @@
 			<artifactId>xmlschema-core</artifactId>
 		</dependency>
 
+		<!-- commons libraries -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<!-- guava libraries -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<!-- epay modules -->
 		<dependency>
 			<groupId>org.larinde.epay</groupId>
 			<artifactId>epay-contract</artifactId>
@@ -69,7 +80,6 @@
 			<artifactId>epay-proc-datastore</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
-		
 	</dependencies>
 
 	<build>

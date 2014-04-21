@@ -1,11 +1,17 @@
 package org.larinde.epay.proc.application;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.larinde.epay.domain.ws.soap.AuthorizeRequest;
 import org.larinde.epay.domain.ws.soap.AuthorizeResponse;
 import org.larinde.epay.domain.ws.soap.BaseRequestType;
 import org.larinde.epay.domain.ws.soap.BaseResponseType;
 import org.larinde.epay.domain.ws.soap.TransactionStatusType;
+import org.larinde.epay.ds.domain.Payment;
+import org.larinde.epay.ds.domain.PaymentFlow;
+import org.larinde.epay.ds.domain.PaymentStatus;
+import org.larinde.epay.ds.domain.repository.PaymentRepository;
 import org.larinde.epay.proc.domain.model.AuthTokenGenerationFailureException;
 import org.larinde.epay.proc.domain.model.MerchantCredential;
 import org.larinde.epay.proc.domain.model.MessageStatus;
@@ -21,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 /**
  * @author olarinde.ajai@gmail.com
  * 
@@ -35,6 +42,9 @@ public class PaymentServiceImpl implements PaymentService {
 	private PaymentIdService paymentIdService;
 	@Autowired
 	private MerchantValidationService merchantValidationService;
+	@Autowired
+	private PaymentRepository paymentRepository;
+	
 
 	@Override
 	public PaymentResponseDTO process(final PaymentRequestDTO request) throws PaymentServiceException {
@@ -42,9 +52,17 @@ public class PaymentServiceImpl implements PaymentService {
 		AuthorizeResponse response = null;
 		try {
 			if (validMerchant(request.getAuthorizeRequest())) {
+				final String transId = paymentIdService.generateTransactionId();
+				final String sessionId = paymentIdService.generateSessionId();
+				final byte[] authToken = authenticationTokenService.generateToken(transId);
+
+				Payment payment = new Payment(sessionId, transId, PaymentStatus.PENDING, request.getAuthorizeRequest().getBaseMessage().getCommunicationDate().toDate(), request.getAuthorizeRequest().getBaseMessage().getMerchantId(), request.getAuthorizeRequest().getServiceType().name(), PaymentFlow.AUTHORIZE, request.getAuthorizeRequest().getAmount(), request.getAuthorizeRequest().getCurrency(), request.getAuthorizeRequest().getDescription());
+				paymentRepository.save(payment);
+				LOGGER.info("saved payment: {}", ToStringBuilder.reflectionToString(payment, ToStringStyle.DEFAULT_STYLE));
+				
 				response = new AuthorizeResponse();
 				response.setBaseMessage(popuateBaseResponse(request.getAuthorizeRequest().getBaseMessage(), APPLICATION_VERSION, MessageStatus.OK));
-				populateAuthorizeResponse(response);
+				populateAuthorizeResponse(response, transId, sessionId, authToken);
 			} else {
 				throw new PaymentServiceException();
 			}
@@ -54,13 +72,12 @@ public class PaymentServiceImpl implements PaymentService {
 		return new PaymentResponseDTO(response);
 	}
 
-	private void populateAuthorizeResponse(AuthorizeResponse response) throws AuthTokenGenerationFailureException {
+	private void populateAuthorizeResponse(AuthorizeResponse response, String transId, String sessionId, byte[] authToken) throws AuthTokenGenerationFailureException {
 		response.setTransactionStatus(TransactionStatusType.IN_PROCESS);
 		response.setReferralURL(authenticationTokenService.getConsumerAuthenticationUrl());
-		response.setSessionId(paymentIdService.generateSessionId());
-		final String transId = paymentIdService.generateTransactionId();
+		response.setSessionId(sessionId);
 		response.setTransactionId(transId);
-		response.setAuthToken(authenticationTokenService.generateToken(transId));
+		response.setAuthToken(authToken);
 	}
 
 	private boolean validMerchant(AuthorizeRequest request) {

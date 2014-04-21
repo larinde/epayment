@@ -1,4 +1,4 @@
-package org.larinde.epay.ds.repository;
+package org.larinde.epay.ds.domain.repository;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -7,16 +7,14 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 import org.larinde.epay.ds.AbstractIntegrationTest;
-import org.larinde.epay.ds.config.JpaDataStoreConfig;
 import org.larinde.epay.ds.domain.Consumer;
+import org.larinde.epay.ds.domain.repository.ConsumerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author olarinde.ajai@gmail.com
  *
  */
-@ContextConfiguration(classes=JpaDataStoreConfig.class)
 public class ConsumerRepositoryImplTest extends AbstractIntegrationTest{
 
 	@Autowired
@@ -32,7 +30,7 @@ public class ConsumerRepositoryImplTest extends AbstractIntegrationTest{
 		BigDecimal balance = new BigDecimal(3000.83).setScale(2, BigDecimal.ROUND_UP);
 		String msisdn = "43123456";
 		String email = "testconsumer@epay.com";
-		Consumer consumer = new Consumer(email, msisdn, balance);
+		Consumer consumer = new Consumer(email, msisdn, balance, true);
 		assertThat(consumer.getId(), is(nullValue()));
 		consumerRepository.save(consumer);
 		assertThat(consumer.getId(), is(notNullValue()));

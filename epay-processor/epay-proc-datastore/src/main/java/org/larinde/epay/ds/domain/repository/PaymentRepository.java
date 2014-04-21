@@ -1,4 +1,4 @@
-package org.larinde.epay.ds.repository;
+package org.larinde.epay.ds.domain.repository;
 
 import java.util.Date;
 import java.util.List;

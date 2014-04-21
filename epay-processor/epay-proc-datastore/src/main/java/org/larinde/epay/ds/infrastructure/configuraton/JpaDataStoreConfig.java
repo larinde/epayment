@@ -1,4 +1,4 @@
-package org.larinde.epay.ds.config;
+package org.larinde.epay.ds.infrastructure.configuraton;
 
 import javax.sql.DataSource;
 
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "org.larinde.epay.ds.repository")
+@EnableJpaRepositories(basePackages = "org.larinde.epay.ds.domain.repository")
 public class JpaDataStoreConfig {
 
 	private static final String ENTITIES_PACKAGE_NAME = "org.larinde.epay.ds.domain";
@@ -33,6 +33,7 @@ public class JpaDataStoreConfig {
 	@Bean
 	public DataSource dataSource() {
 		EmbeddedDatabaseBuilder dbBuilder = new EmbeddedDatabaseBuilder();
+		// dbBuilder.addScript("init.sql");
 		return dbBuilder.setType(EmbeddedDatabaseType.HSQL).build();
 	}
 

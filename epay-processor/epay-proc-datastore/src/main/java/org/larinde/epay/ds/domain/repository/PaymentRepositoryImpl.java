@@ -1,4 +1,4 @@
-package org.larinde.epay.ds.repository;
+package org.larinde.epay.ds.domain.repository;
 
 import java.util.Date;
 import java.util.List;
@@ -9,11 +9,13 @@ import org.larinde.epay.ds.domain.Payment;
 import org.larinde.epay.ds.domain.PaymentFlow;
 import org.larinde.epay.ds.domain.PaymentStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author olarinde.ajai@gmail.com
  * 
  */
+@Transactional
 @Repository
 public class PaymentRepositoryImpl extends AbstractEpayRepository implements PaymentRepository {
 

@@ -1,4 +1,4 @@
-package org.larinde.epay.ds.repository;
+package org.larinde.epay.ds.domain.repository;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -10,19 +10,16 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.larinde.epay.ds.AbstractIntegrationTest;
-import org.larinde.epay.ds.config.JpaDataStoreConfig;
 import org.larinde.epay.ds.domain.Payment;
 import org.larinde.epay.ds.domain.PaymentFlow;
 import org.larinde.epay.ds.domain.PaymentStatus;
-import org.larinde.epay.ds.repository.PaymentRepository;
+import org.larinde.epay.ds.domain.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author olarinde.ajai@gmail.com
  *
  */
-@ContextConfiguration(classes=JpaDataStoreConfig.class)
 public class PaymentRepositoryImplTest extends AbstractIntegrationTest {
 	
 	@Autowired

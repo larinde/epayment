@@ -1,4 +1,4 @@
-package org.larinde.epay.ds.repository;
+package org.larinde.epay.ds.domain.repository;
 
 
 import org.larinde.epay.ds.domain.Consumer;

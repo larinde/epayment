@@ -12,10 +12,7 @@ import javax.persistence.NamedQuery;
  * 
  */
 @Entity
-@NamedQueries({ 
-	@NamedQuery(name = Consumer.FIND_CONSUMER_BY_EMAIL, query = "SELECT cn FROM Consumer cn WHERE cn.email = :email"), 
-	@NamedQuery(name = Consumer.FIND_CONSUMER_BY_MSISDN, query = "SELECT cn FROM Consumer cn WHERE cn.msisdn = :msisdn") 
-})
+@NamedQueries({ @NamedQuery(name = Consumer.FIND_CONSUMER_BY_EMAIL, query = "SELECT cn FROM Consumer cn WHERE cn.email = :email"), @NamedQuery(name = Consumer.FIND_CONSUMER_BY_MSISDN, query = "SELECT cn FROM Consumer cn WHERE cn.msisdn = :msisdn") })
 public class Consumer extends AbstractEntity {
 	private static final long serialVersionUID = -8419720277381288177L;
 	public static final String FIND_CONSUMER_BY_EMAIL = "findConsumerByEmail";
@@ -30,16 +27,27 @@ public class Consumer extends AbstractEntity {
 	private String msisdn;
 	@Column(nullable = false)
 	private BigDecimal balance;
+	@Column(nullable = false)
+	private boolean active;
 
 	public Consumer() {
 		super();
 	}
 
-	public Consumer(String email, String msisdn, BigDecimal balance) {
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public Consumer(String email, String msisdn, BigDecimal balance, boolean active) {
 		super();
 		this.email = email;
 		this.msisdn = msisdn;
 		this.balance = balance;
+		this.active = active;
 	}
 
 	public String getEmail() {

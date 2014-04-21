@@ -1,17 +1,16 @@
-package org.larinde.epay.ds.repository;
+package org.larinde.epay.ds.domain.repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.larinde.epay.ds.domain.Consumer;
-import org.larinde.epay.ds.domain.Payment;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author olarinde.ajai@gmail.com
  *
  */
+@Transactional
 @Repository
 public class ConsumerRepositoryImpl extends AbstractEpayRepository implements ConsumerRepository {
 
