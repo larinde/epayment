@@ -19,8 +19,8 @@ public class MerchantValidationServiceImpl implements MerchantValidationService 
 
 	@Override
 	public boolean validMerchant(MerchantCredential credential) {
-		Merchant merchant = merchantRepository.findByMerchantId(credential.getUsername());
-		if (merchant.isActive()&(merchant.getPassword().equals(credential.getPassword()))) {
+		Merchant merchant = merchantRepository.findByMerchantId(credential.getMerchantId());
+		if (merchant.isActive() && (merchant.getPassword().equals(credential.getPassword()))) {
 			return true;
 		}
 		return false;

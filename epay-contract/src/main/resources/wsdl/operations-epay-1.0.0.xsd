@@ -7,9 +7,10 @@
 		<xs:annotation>
 			<xs:documentation>
 				The authorize call Initializes the payment process.
-				The client is validated. On success, the server responds with a referral url.
-				The client is expected to redirect its consumer to the referral url.
-				The referral url is a link to the payment processor's authentication system for consumers.
+				Both the client and consumer are validated/verified. On success, the server responds with a referral url.
+				The client is expected to redirect its consumer to the referral url. The referral url is a link to the
+				payment processor's authentication system for consumers.
+				On successful consumer authentication, the amount is reserved.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -20,6 +21,7 @@
 				<xs:element name="amount" type="xs:decimal" minOccurs="1" maxOccurs="1" />
 				<xs:element name="currency" type="xs:string" minOccurs="1" maxOccurs="1" />
 				<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="consumerId" type="pymt-op-v1:ConsumerId" minOccurs="1" maxOccurs="1" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -155,6 +157,25 @@
 			<xs:element name="additionalInfo" type="xs:string" maxOccurs="1" nillable="true" />
 		</xs:sequence>
 	</xs:complexType>
+
+	<xs:complexType name="ConsumerId">
+		<xs:choice>
+			<xs:element name="email" type="pymt-op-v1:Email" />
+			<xs:element name="msisdn" type="pymt-op-v1:Msisdn" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="Msisdn">
+		<xs:restriction base="xs:integer">
+			<xs:pattern value="[0-9]{10,15}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="Email">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}" />
+		</xs:restriction>
+	</xs:simpleType>
 
 	<xs:simpleType name="MessageType">
 		<xs:restriction base="xs:string">
