@@ -1,7 +1,7 @@
 package org.larinde.epay.proc.domain.service;
 
-import org.larinde.epay.proc.domain.model.AuthTokenGenerationFailureException;
-import org.larinde.epay.proc.domain.model.AuthTokenVerificationFailureException;
+import org.larinde.epay.proc.domain.exception.AuthTokenGenerationFailureException;
+import org.larinde.epay.proc.domain.exception.AuthTokenVerificationFailureException;
 
 /**
  * @author olarinde.ajai@gmail.com

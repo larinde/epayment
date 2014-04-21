@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
@@ -48,12 +49,14 @@ public class Payment extends AbstractEntity {
 	@Column(nullable = false)
 	private String currency;
 	private String description;
+	@ManyToOne
+	private Consumer consumer;
 
 	protected Payment() {
 		super();
 	}
 
-	public Payment(String sessionId, String transactionId, PaymentStatus status, Date date, String merchantId, String serviceType, PaymentFlow paymentFlow, BigDecimal amount, String currency, String description) {
+	public Payment(String sessionId, String transactionId, PaymentStatus status, Date date, String merchantId, String serviceType, PaymentFlow paymentFlow, BigDecimal amount, String currency, String description, Consumer consumer) {
 		super();
 		this.sessionId = sessionId;
 		this.transactionId = transactionId;
@@ -65,6 +68,7 @@ public class Payment extends AbstractEntity {
 		this.amount = amount;
 		this.currency = currency;
 		this.description = description;
+		this.consumer = consumer;
 	}
 
 	public String getTransactionId() {
@@ -145,6 +149,14 @@ public class Payment extends AbstractEntity {
 
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
+	}
+
+	public Consumer getConsumer() {
+		return consumer;
+	}
+
+	public void setConsumer(Consumer consumer) {
+		this.consumer = consumer;
 	}
 
 }

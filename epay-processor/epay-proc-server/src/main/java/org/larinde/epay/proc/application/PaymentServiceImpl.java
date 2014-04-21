@@ -1,5 +1,7 @@
 package org.larinde.epay.proc.application;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
@@ -7,12 +9,17 @@ import org.larinde.epay.domain.ws.soap.AuthorizeRequest;
 import org.larinde.epay.domain.ws.soap.AuthorizeResponse;
 import org.larinde.epay.domain.ws.soap.BaseRequestType;
 import org.larinde.epay.domain.ws.soap.BaseResponseType;
+import org.larinde.epay.domain.ws.soap.ConsumerId;
 import org.larinde.epay.domain.ws.soap.TransactionStatusType;
+import org.larinde.epay.ds.domain.Consumer;
 import org.larinde.epay.ds.domain.Payment;
 import org.larinde.epay.ds.domain.PaymentFlow;
 import org.larinde.epay.ds.domain.PaymentStatus;
+import org.larinde.epay.ds.domain.repository.ConsumerRepository;
 import org.larinde.epay.ds.domain.repository.PaymentRepository;
-import org.larinde.epay.proc.domain.model.AuthTokenGenerationFailureException;
+import org.larinde.epay.proc.domain.exception.AuthTokenGenerationFailureException;
+import org.larinde.epay.proc.domain.exception.ConsumerHasInsufficientFundsException;
+import org.larinde.epay.proc.domain.exception.InvalidMerchantCredentialsException;
 import org.larinde.epay.proc.domain.model.MerchantCredential;
 import org.larinde.epay.proc.domain.model.MessageStatus;
 import org.larinde.epay.proc.domain.model.PaymentRequestDTO;
@@ -26,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 /**
  * @author olarinde.ajai@gmail.com
@@ -44,32 +50,71 @@ public class PaymentServiceImpl implements PaymentService {
 	private MerchantValidationService merchantValidationService;
 	@Autowired
 	private PaymentRepository paymentRepository;
-	
+	@Autowired
+	private ConsumerRepository consumerRepository;
 
 	@Override
 	public PaymentResponseDTO process(final PaymentRequestDTO request) throws PaymentServiceException {
 		LOGGER.info("processing authorize request");
+		//TODO: use rule engine
 		AuthorizeResponse response = null;
 		try {
 			if (validMerchant(request.getAuthorizeRequest())) {
-				final String transId = paymentIdService.generateTransactionId();
-				final String sessionId = paymentIdService.generateSessionId();
-				final byte[] authToken = authenticationTokenService.generateToken(transId);
+				final Consumer consumer = getConsumer(request.getAuthorizeRequest().getConsumerId());
+				if (consumerHasEnoughFund(consumer, request.getAuthorizeRequest().getAmount())) {
+					final String transId = paymentIdService.generateTransactionId();
+					final String sessionId = paymentIdService.generateSessionId();
+					final byte[] authToken = authenticationTokenService.generateToken(transId);
 
-				Payment payment = new Payment(sessionId, transId, PaymentStatus.PENDING, request.getAuthorizeRequest().getBaseMessage().getCommunicationDate().toDate(), request.getAuthorizeRequest().getBaseMessage().getMerchantId(), request.getAuthorizeRequest().getServiceType().name(), PaymentFlow.AUTHORIZE, request.getAuthorizeRequest().getAmount(), request.getAuthorizeRequest().getCurrency(), request.getAuthorizeRequest().getDescription());
-				paymentRepository.save(payment);
-				LOGGER.info("saved payment: {}", ToStringBuilder.reflectionToString(payment, ToStringStyle.DEFAULT_STYLE));
-				
-				response = new AuthorizeResponse();
-				response.setBaseMessage(popuateBaseResponse(request.getAuthorizeRequest().getBaseMessage(), APPLICATION_VERSION, MessageStatus.OK));
-				populateAuthorizeResponse(response, transId, sessionId, authToken);
-			} else {
-				throw new PaymentServiceException();
+					Payment payment = new Payment(sessionId, transId, PaymentStatus.PENDING, request.getAuthorizeRequest().getBaseMessage().getCommunicationDate().toDate(), request.getAuthorizeRequest().getBaseMessage().getMerchantId(), request.getAuthorizeRequest().getServiceType().name(), PaymentFlow.AUTHORIZE, request.getAuthorizeRequest().getAmount(), request.getAuthorizeRequest().getCurrency(), request.getAuthorizeRequest().getDescription(), consumer);
+					paymentRepository.save(payment);
+					LOGGER.info("saved payment: {}", ToStringBuilder.reflectionToString(payment, ToStringStyle.DEFAULT_STYLE));
+
+					response = new AuthorizeResponse();
+					response.setBaseMessage(popuateBaseResponse(request.getAuthorizeRequest().getBaseMessage(), APPLICATION_VERSION, MessageStatus.OK));
+					populateAuthorizeResponse(response, transId, sessionId, authToken);
+				}
 			}
 		} catch (AuthTokenGenerationFailureException e) {
 			throw new PaymentServiceException();
+		} catch (ConsumerHasInsufficientFundsException chie) {
+			throw new PaymentServiceException();
+		} catch (InvalidMerchantCredentialsException imc) {
+			throw new PaymentServiceException();
 		}
 		return new PaymentResponseDTO(response);
+	}
+
+	private boolean consumerHasEnoughFund(Consumer consumer, BigDecimal amount) throws ConsumerHasInsufficientFundsException {
+		if (consumer.getBalance().compareTo(amount) < 0) {
+			throw new ConsumerHasInsufficientFundsException();
+		}
+		return true;
+	}
+
+	private boolean pendingPaymentsExceedsAvailableFunds(Consumer consumer, BigDecimal amount) {
+		BigDecimal pendingAmountReservation = new BigDecimal(0);
+		for (Payment payment : consumer.getPayments()) {
+			if (payment.getStatus().equals(PaymentStatus.PENDING)) {
+				pendingAmountReservation = pendingAmountReservation.add(payment.getAmount());
+			}
+		}
+		if (consumer.getBalance().compareTo(pendingAmountReservation) >= 0) {
+			return false;
+		}
+		return true;
+	}
+
+	private Consumer getConsumer(ConsumerId consumerId) throws PaymentServiceException {
+		try {
+			if (consumerId.getEmail() != null) {
+				return consumerRepository.findByEmail(consumerId.getEmail());
+			} else {
+				return consumerRepository.findByMsisdn(consumerId.getMsisdn().toString());
+			}
+		} catch (Exception e) {
+			throw new PaymentServiceException();
+		}
 	}
 
 	private void populateAuthorizeResponse(AuthorizeResponse response, String transId, String sessionId, byte[] authToken) throws AuthTokenGenerationFailureException {
@@ -80,10 +125,13 @@ public class PaymentServiceImpl implements PaymentService {
 		response.setAuthToken(authToken);
 	}
 
-	private boolean validMerchant(AuthorizeRequest request) {
+	private boolean validMerchant(AuthorizeRequest request) throws InvalidMerchantCredentialsException {
 		LOGGER.debug("validating merchant with id {}", request.getBaseMessage().getMerchantId());
 		MerchantCredential credential = new MerchantCredential(request.getBaseMessage().getUsername(), request.getBaseMessage().getPassword(), request.getBaseMessage().getMerchantId(), false);
-		return merchantValidationService.validMerchant(credential);
+		if (!merchantValidationService.validMerchant(credential)) {
+			throw new InvalidMerchantCredentialsException();
+		}
+		return true;
 	}
 
 	private BaseResponseType popuateBaseResponse(BaseRequestType baseRequest, String appVersion, MessageStatus messageStatus) {

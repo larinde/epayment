@@ -4,8 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import org.larinde.epay.proc.domain.model.AuthTokenGenerationFailureException;
-import org.larinde.epay.proc.domain.model.AuthTokenVerificationFailureException;
+import org.larinde.epay.proc.domain.exception.AuthTokenGenerationFailureException;
+import org.larinde.epay.proc.domain.exception.AuthTokenVerificationFailureException;
 import org.larinde.epay.proc.domain.service.AuthenticationService;
 import org.springframework.stereotype.Service;
 

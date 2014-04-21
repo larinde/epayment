@@ -1,11 +1,13 @@
 package org.larinde.epay.ds.domain;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 /**
  * @author olarinde.ajai@gmail.com
@@ -29,6 +31,8 @@ public class Consumer extends AbstractEntity {
 	private BigDecimal balance;
 	@Column(nullable = false)
 	private boolean active;
+	@OneToMany(mappedBy = "consumer")
+	private Set<Payment> payments;
 
 	public Consumer() {
 		super();
@@ -72,6 +76,14 @@ public class Consumer extends AbstractEntity {
 
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
+	}
+
+	public Set<Payment> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Set<Payment> payments) {
+		this.payments = payments;
 	}
 
 }

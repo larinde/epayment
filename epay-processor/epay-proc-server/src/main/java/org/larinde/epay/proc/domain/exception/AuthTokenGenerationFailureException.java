@@ -1,4 +1,4 @@
-package org.larinde.epay.proc.domain.model;
+package org.larinde.epay.proc.domain.exception;
 
 /**
  * @author olarinde.ajai@gmail.com
