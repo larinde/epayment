@@ -1,19 +1,22 @@
 package org.larinde.epay.proc.application;
 
-import org.larinde.epay.proc.domain.model.AbstractPaymentFlowMessage;
-import org.larinde.epay.proc.domain.model.AbstractPaymentFlowRequest;
+
+import org.larinde.epay.proc.domain.model.CapturePaymentFlowRequest;
+import org.larinde.epay.proc.domain.model.CapturePaymentFlowResponse;
+import org.larinde.epay.proc.domain.model.PaymentServiceException;
 import org.larinde.epay.proc.domain.service.PaymentFlowService;
 
 /**
  * @author olarinde.ajai@gmail.com
  *
  */
-public class CapturePaymentFlowService implements PaymentFlowService {
+public class CapturePaymentFlowService implements PaymentFlowService<CapturePaymentFlowResponse, CapturePaymentFlowRequest> {
 
 	@Override
-	public AbstractPaymentFlowMessage execute(AbstractPaymentFlowRequest request) {
+	public CapturePaymentFlowResponse execute(CapturePaymentFlowRequest request) throws PaymentServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

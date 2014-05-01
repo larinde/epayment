@@ -4,6 +4,10 @@
 
 	<!-- define javaconfig classes to bootstrap -->
 	<beans:bean class="org.larinde.epay.proc.infrastructure.configuration.EpayProcessorServerConfig" />
-	<beans:bean class="org.springframework.context.annotation.ConfigurationClassPostProcessor"/>
+	<beans:bean class="org.springframework.context.annotation.ConfigurationClassPostProcessor" />
+
+	<context:component-scan base-package="org.larinde.epay.proc.application" />
+	<context:component-scan base-package="org.larinde.epay.proc.domain.model" />
+
 
 </beans:beans>
