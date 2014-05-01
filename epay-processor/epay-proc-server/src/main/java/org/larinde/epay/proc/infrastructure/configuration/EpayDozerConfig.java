@@ -1,8 +1,10 @@
 package org.larinde.epay.proc.infrastructure.configuration;
 
+import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.larinde.epay.domain.ws.soap.AuthorizeRequest;
 import org.larinde.epay.proc.domain.model.AuthorizePaymentFlowRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -13,9 +15,12 @@ import org.springframework.context.annotation.Configuration;
 public class EpayDozerConfig {
 	
 	static BeanMappingBuilder beanMappingBuilder = new BeanMappingBuilder() {
-		
 		@Override
 		protected void configure() {
+			authorizeMappings();
+		}
+
+		private void authorizeMappings() {
 			mapping(AuthorizeRequest.class, AuthorizePaymentFlowRequest.Builder.class)
 			.fields(field("baseMessage.version").setMethod("setVersion"), field("version").setMethod("version"))
 			//.fields(field("baseMessage.requestType").setMethod("setRequestType"), field("version").setMethod("version"))
@@ -27,9 +32,14 @@ public class EpayDozerConfig {
 			.fields(field("amount").setMethod("setAmount"), field("amount").setMethod("amount"))
 			.fields(field("currency").setMethod("setCurrency"), field("currency").setMethod("currency"))
 			.fields(field("description").setMethod("setDescription"), field("description").setMethod("description"));
-			
 		}
 	};
 	
+	@Bean
+	public DozerBeanMapper mapper() {
+		DozerBeanMapper mapper = new DozerBeanMapper();
+		mapper.addMapping(beanMappingBuilder);
+		return mapper;
+	}
 
 }
