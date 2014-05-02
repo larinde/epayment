@@ -41,7 +41,6 @@ public class Payment extends AbstractEntity {
 	private Date date;
 	@Column(nullable = false)
 	private String merchantId;
-	private String serviceType;
 	@Enumerated(EnumType.STRING)
 	private PaymentFlow paymentFlow;
 	@Column(nullable = false)
@@ -56,14 +55,13 @@ public class Payment extends AbstractEntity {
 		super();
 	}
 
-	public Payment(String sessionId, String transactionId, PaymentStatus status, Date date, String merchantId, String serviceType, PaymentFlow paymentFlow, BigDecimal amount, String currency, String description, Consumer consumer) {
+	public Payment(String sessionId, String transactionId, PaymentStatus status, Date date, String merchantId, PaymentFlow paymentFlow, BigDecimal amount, String currency, String description, Consumer consumer) {
 		super();
 		this.sessionId = sessionId;
 		this.transactionId = transactionId;
 		this.status = status;
 		this.date = date;
 		this.merchantId = merchantId;
-		this.serviceType = serviceType;
 		this.paymentFlow = paymentFlow;
 		this.amount = amount;
 		this.currency = currency;
@@ -101,14 +99,6 @@ public class Payment extends AbstractEntity {
 
 	public void setMerchantId(String merchantId) {
 		this.merchantId = merchantId;
-	}
-
-	public String getServiceType() {
-		return serviceType;
-	}
-
-	public void setServiceType(String serviceType) {
-		this.serviceType = serviceType;
 	}
 
 	public PaymentFlow getPaymentFlow() {

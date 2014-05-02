@@ -35,7 +35,7 @@ public class PaymentRepositoryImplTest extends AbstractIntegrationTest {
 	@Test
 	public void shouldSaveNewPayment() {
 		Consumer consumer = new Consumer("testconsumer@epay.com", "497634872373", new BigDecimal(3000.83).setScale(2, BigDecimal.ROUND_UP), true);
-		Payment payment = new Payment("SID_1234567", "TRN_1234567", PaymentStatus.OPEN, new Date(), "ABC123", "service", PaymentFlow.AUTHORIZE, new BigDecimal("13.35"), "USD", "some item", consumer);
+		Payment payment = new Payment("SID_1234567", "TRN_1234567", PaymentStatus.OPEN, new Date(), "ABC123", PaymentFlow.AUTHORIZE, new BigDecimal("13.35"), "USD", "some item", consumer);
 		assertThat(payment.getId(), is(nullValue()));
 		paymentRepository.save(payment);
 		assertThat(payment.getId(), is(notNullValue()));
