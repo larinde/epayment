@@ -11,7 +11,6 @@ public class AcknowledgePaymentFlowResponse extends AbstractPaymentFlowResponse 
 
 	public AcknowledgePaymentFlowResponse(PaymentFlow paymentFlow, String version, String requestId, DateTime communicationDate, String statusCode, String statusText) {
 		super(paymentFlow, version, requestId, communicationDate, statusCode, statusText);
-		// TODO Auto-generated constructor stub
 	}
 
 }

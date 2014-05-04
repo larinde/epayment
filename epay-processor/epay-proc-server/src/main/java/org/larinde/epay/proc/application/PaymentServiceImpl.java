@@ -66,7 +66,7 @@ public class PaymentServiceImpl implements PaymentService {
 					final String sessionId = paymentIdService.generateSessionId();
 					final byte[] authToken = authenticationTokenService.generateToken(transId);
 
-					Payment payment = new Payment(sessionId, transId, PaymentStatus.PENDING, request.getAuthorizeRequest().getBaseMessage().getCommunicationDate().toDate(), request.getAuthorizeRequest().getBaseMessage().getMerchantId(), request.getAuthorizeRequest().getServiceType().name(), PaymentFlow.AUTHORIZE, request.getAuthorizeRequest().getAmount(), request.getAuthorizeRequest().getCurrency(), request.getAuthorizeRequest().getDescription(), consumer);
+					Payment payment = new Payment(sessionId, transId, PaymentStatus.PENDING, request.getAuthorizeRequest().getBaseMessage().getCommunicationDate().toDate(), request.getAuthorizeRequest().getBaseMessage().getMerchantId(), PaymentFlow.AUTHORIZE, request.getAuthorizeRequest().getAmount(), request.getAuthorizeRequest().getCurrency(), request.getAuthorizeRequest().getDescription(), consumer);
 					paymentRepository.save(payment);
 					LOGGER.info("saved payment: {}", ToStringBuilder.reflectionToString(payment, ToStringStyle.DEFAULT_STYLE));
 
