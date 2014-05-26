@@ -79,19 +79,6 @@
 		</dependency>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 		<!-- Bean Validation Dependencies -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -118,6 +105,12 @@
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.mobile</groupId>
+			<artifactId>spring-mobile-device</artifactId>
+			<version>${spring.mobile.version}</version>
 		</dependency>
 
 		<dependency>
