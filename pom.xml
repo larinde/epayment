@@ -27,7 +27,7 @@
 	<modules>
 		<module>epay-contract</module>
 		<module>epay-common</module>
-		<module>epay-shop</module>
+		<!-- <module>epay-shop</module> -->
 		<module>epay-processor</module>
 		<module>epay-events</module>
 		<module>epay-analytics</module>
